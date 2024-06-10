@@ -34,8 +34,8 @@ params:
   page:
     width: wide
   theme:
-    default: system
-    displayToggle: true
+    default: light
+    displayToggle: false
   navbar:
     displayTitle: true
     displayLogo: false
