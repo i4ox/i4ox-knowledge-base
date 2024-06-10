@@ -1,0 +1,68 @@
+baseURL: https://i4ox.github.io/i4ox-knowledge-base/ # URL сайта
+title: I4ox Knowledge Base # Заголовок сайта
+paginate: 100 # Пагинация
+theme: Hextra # Тема, которая используется
+
+# Поддержка русского языка
+defaultConctentLanguage: ru # Язык по-умолчанию
+# defaultContentLanguageInSubdir: true
+languageCode: ru-RU
+languageName: Russian
+
+buildDrafts: false # Включать ли черновики в итоговый результат
+buildFuture: false # Включать ли заплонированные посты в итоговый результат
+buildExpired: false # Включать ли посты с истекщим сроком в итоговый результат
+pygmentsUseClasses: false # Позволяет использовать CSS классы для подсветки кода
+
+# Данные строки оптимизируют итоговый результат
+minify:
+  disableXML: true
+  minifyOutput: true
+
+outputs:
+  home:
+    - HTML
+    - RSS
+
+params:
+  search:
+    enable: true
+    type: flexsearch
+    flexsearch:
+      index: content
+      tokenize: forward
+  page:
+    width: wide
+  theme:
+    default: system
+    displayToggle: true
+  navbar:
+    displayTitle: true
+    displayLogo: false
+    # logo:
+    #   path: images/logo.svg
+    #   dark: images/logo-dark.svg
+    #   link: /
+    #   width: 40
+    #   height: 20
+
+menu:
+  main:
+    - name: Документация
+      pageRef: /docs
+      weight: 1
+    - name: Блог
+      pageRef: /blog
+      weight: 2
+    - name: Профиль
+      pageRef: /profile
+      weight: 3
+    - name: Поиск
+      weight: 4
+      params:
+        type: search
+    - name: GitHub
+      weight: 5
+      url: https://github.com/i4ox
+      params:
+        icon: github
