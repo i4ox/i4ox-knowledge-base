@@ -36,6 +36,14 @@ Git нам позволяет явно указать редактор, кото
 git config --global core.editor nvim
 ```
 
+### merge.tool
+
+Указывает на инструмент, который надо использовать для команды `mergetool`.
+
+```bash
+git config --global merge.tool nvimdiff
+```
+
 ### init.defaultBranch
 
 Ветка, с которой проект создается по-умолчанию.

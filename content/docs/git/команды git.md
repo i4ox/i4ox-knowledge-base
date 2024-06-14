@@ -166,6 +166,7 @@ git push origin --tags # Отправляем все теги
 git push origin --follow-tags # Отправляет только обычные теги(аннотированные)
 git push origin :refs/tags/v1.1 # Удаляем тег. Способ №1
 git push origin --delete v1.1 # Удаляем тег. Способ №2
+git push origin --delete old_branch # Удаляет старую ветку
 ```
 
 ## git tag
@@ -192,9 +193,78 @@ git tag -d v1.1 # Удаление тега
 git show v1.1
 ```
 
-### git checkout
+## git checkout
+
+Позволяет переключаться между ветками.
 
 ```bash
 git checkout v1.1 # Переключение на тег
 git checkout -b new_version v1.1 # Создает новую ветку, которая сместится, если создать коммит, условоно это будет v1.1.1
+git checkout --track i4ox/v1.1 # Будет отслежить i4ox/v1.1 вместо origin/v1.1
+```
+
+## git branch
+
+Позволяет создать новую ветку.
+
+```bash
+git branch testing # Создает новую ветку с названием testing
+git branch --all # Выводит все ветки
+git branch -d testing # Удаляет ветку
+git branch -v # Позволяет просмотреть последний коммит на каждой из веток
+git branch --merged # Показывает ветки, которые уже слиты с текущей
+git branch --no-merged # Показывает ветки, которые не слиты с текущей
+git branch --move old_name new_name # Позволяет переименовать ветку(локально)
+git branch -u i4ox/testing # Позволяет создать ветку и подключить её к удаленному репозиторию
+```
+
+Новую ветку, созданную командой `git branch --move`, надо отправить в удаленный репозиторий.
+
+## git merge
+
+Позволяет провести слияние веток.
+
+```bash
+git merge testing # Делает слияние текущей ветки с веткой testing
+```
+
+Иногда Git не может сам решить конфликты, и оставляет маркеры для того, чтобы их можно было разрешить вручную.
+
+Пример:
+
+```html
+<<<<<<< HEAD:index.html
+<div id="footer">contact : email.support@github.com</div>
+=======
+<div id="footer">
+please contact us at support@github.com
+</div>
+>>>>>>> iss53:index.html
+```
+
+В этом примере произошел конфликт текущей ветки с веткой iss53 в файле index.html.
+
+## git mergetool
+
+Открывает инструмент для разрешения конфликтов.
+
+```bash
+git mergetool
+```
+
+## git ls-remote
+
+Позволяет просмотреть все удаленный ссылки в удаленном репозитории.
+
+```bash
+git ls-remove git@github.com:i4ox/dotfiles
+```
+
+## git rebase
+
+Накладывает все коммиты одной ветки поверх коммитов другой ветки.
+
+```bash
+git rebase master server
+git rebase --onto master server client # Берем изменения из client, которых  нету в server и применяем их к мастер
 ```
