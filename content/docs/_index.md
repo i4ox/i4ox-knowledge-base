@@ -1,8 +1,15 @@
-# Моя база знаний
+---
+title: "Мои заметки"
+toc: false
+---
 
-1. [Мои заметки о Debian](./debian/)
-2. [Мои заметки о Docker](./docker/)
-3. [Мои заметки о Git](./git/)
-4. [Мои заметки о Linux](./linux/)
-5. [Мои заметки о Rocky Linux](./rocky_linux/)
-6. [Мои заметки о SSH](./ssh/)
+## Разделы
+
+{{< cards >}}
+    {{< card link="debian" title="Debian" icon="book-open" >}}
+    {{< card link="docker" title="Docker" icon="book-open" >}}
+    {{< card link="git" title="Git" icon="book-open" >}}
+    {{< card link="linux" title="Линукс" icon="book-open" >}}
+    {{< card link="rhel" title="RHEL" icon="book-open" >}}
+    {{< card link="ssh" title="SSH" icon="book-open" >}}
+{{< /cards >}}
