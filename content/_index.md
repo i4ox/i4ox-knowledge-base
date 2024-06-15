@@ -7,6 +7,7 @@ toc: false
 
 {{< cards >}}
   {{< card link="docs" title="Документация" icon="book-open" >}}
+  {{< card link="labs" title="Практика/Лабы" icon="book-open" >}}
   {{< card link="profile" title="Профиль" icon="user" >}}
 {{< /cards >}}
 

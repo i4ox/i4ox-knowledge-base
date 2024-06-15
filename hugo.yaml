@@ -51,15 +51,18 @@ menu:
     - name: Документация
       pageRef: /docs
       weight: 1
+    - name: Практика
+      pageRef: /labs
+      weight: 2
     - name: Профиль
       pageRef: /profile
-      weight: 2
-    - name: Поиск
       weight: 3
+    - name: Поиск
+      weight: 4
       params:
         type: search
     - name: GitHub
-      weight: 4
+      weight: 5
       url: https://github.com/i4ox
       params:
         icon: github
