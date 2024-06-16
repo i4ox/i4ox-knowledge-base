@@ -268,3 +268,23 @@ git ls-remove git@github.com:i4ox/dotfiles
 git rebase master server
 git rebase --onto master server client # Берем изменения из client, которых  нету в server и применяем их к мастер
 ```
+
+## git daemon
+
+Используется для настройки демона Git.
+
+Флаги:
+
+- reuseaddr: перезапускает сервер без ожидания таймаута существующих подключений.
+- base-path: указывается путь, где хранятся проекты. Путь будет автоматически подставляться, то есть вместо `/srv/git/nvops.git` можно будет использовать `nvops.git`.
+- export-all: экспортирует все проекты в директории `/srv/git/`.
+
+**P.S**: `base-path` влияет на `git://`.
+
+**P.P.S**: вместо `export-all` можно добавлять в каждый репозиторий файл `git-daemon-export-ok`.
+
+```bash
+git daemon --reuseaddr --export-all --base-path=/srv/git/ /srv/git/
+```
+
+Однако команду выше стоит запускать через сервис. Как это делать можно посмотреть в пункте `серверный git`.
