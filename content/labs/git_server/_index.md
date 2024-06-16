@@ -20,7 +20,7 @@ apt install openssh-server
 Нужно настроить следующие параметры:
 
 - Port: поменять его с дефолтного
-- PermitRootLogin: отключить
+- PermitRootLogin: отключить(после создания `dev` пользователя)
 - PasswordAuthentification: отключить(после добавления ключей)
 - PermitEmptyPasswords: отключить
 - PubkeyAuthentification: включить
@@ -31,6 +31,30 @@ apt install openssh-server
 systemctl restart sshd
 ```
 
+### Пользователь dev
+
+Пользователь с доступом к рут-правам через `sudo`. Нужен для подключения к серверу, чтобы его можно было настраивать, потому что `root` закрыт, а `git` использует `git-shell`.
+
+```bash
+adduser dev
+apt install sudo
+usermod -aG sudo dev
+su dev
+mkdir .ssh
+chmod 700 .ssh
+touch .ssh/authorized_keys
+chmod 600 .ssh/authorized_keys # Добавить ключ системного_администратора
+```
+
+Так как теперь у нас есть пользователь для взаимодействия с системой, то мы может отключить `root`.
+
+```bash
+sudo nano /etc/passwd
+# Меняем root:x:0:0:root:/root:/bin/bash на root:x:0:0:root:/root:/sbin/nologin
+```
+
+![root disable](./assets/disable_root.png)
+
 ### Пользователь git
 
 Для работы с git на нашем сервере, создадим отдельного пользователя:
@@ -40,7 +64,6 @@ systemctl restart sshd
 ```bash
 adduser git
 su git
-
 ```
 
 2. Настроим SSH для нового пользователя
@@ -159,18 +182,89 @@ systemctl status git-daemon
 
 ### Настройка сервера и установка GitWeb
 
-Скоро ...
+1. Использовать `git instaweb`, но тогда в каждом проекте придется запускать собственный экземпляр данной команды.
+2. Через отдельно настроенный `gitweb`.
 
-### В планах/Реализовано
+#### Первый вариант
 
-- [X] Настройка SSH
-- [X] Инициализация проекта/Нескольких проектов
-- [X] Подключение к ним по SSH/паролю/анонимно
-    - [X] Подключение по SSH
-    - [X] Отключение входа по паролю
-    - [X] Анонимный вход за счет демона Git(используется для просмотра репозиториев)
-- [X] Настройка ограничения доступа
-- [X] Настройка демона Git и анонимного входа(просмотр репозитория)
-- [X] Настройка сервера
-- [ ] Настройка клинта GitWeb
-- [ ] Итоги
+**P.S**: `gitweb` постовляется как отдельно, так и вмесете с `git`. Команда `git instaweb` использует, установленный вместе с самим `git` экземпляр
+
+```bash
+apt install lighttpd
+cd /srv/git/<project>.git
+git instaweb # Сделать для всех нужных проектов
+git instaweb --stop # Чтобы остановить веб-сервер
+```
+
+![gitweb with libhttpd](./assets/gitweb_with_lighttpd.png)
+
+#### Второй способ
+
+Для начала надо поставить все необходимые инструменты:
+
+```bash
+apt install nginx gitweb fcgiwrap
+```
+
+Теперь мы можем открыть наш сервер и мы увидем следующее:
+
+![nginx default page](./assets/default_nginx_page.png)
+
+
+Далее выполняем следующее:
+
+```bash
+cd /etc/nginx/sites-enabled
+rm default
+touch gitweb
+```
+
+Только что созданный файл будет иметь следующее содержимое:
+
+```conf
+server {
+    listen 80;
+    #replace "example.com" below with your domain (or subdomain)
+    server_name example.com;
+
+    location /index.cgi {
+      root /usr/share/gitweb/;
+      include fastcgi_params;
+      gzip off;
+      fastcgi_param SCRIPT_NAME $uri;
+      fastcgi_param GITWEB_CONFIG /etc/gitweb.conf;
+      fastcgi_pass  unix:/var/run/fcgiwrap.socket;
+    }
+
+    location / {
+      root /usr/share/gitweb/;
+      index index.cgi;
+    }
+
+}
+```
+
+После перезапускаем `nginx` и мы сможем увидеть следующее:
+
+![nginx with gitweb](./assets/nginx_with_gitweb.png)
+
+Но nginx не видет проекты, исправим это. Для этого нам надо отредактировать конфигурацию `gitweb.conf`.
+
+```bash
+nano /etc/gitweb.conf
+# $projectroot = '/srv/git'; вместо /var/lib/git
+```
+
+В конце мы увидем необходимый результат.
+
+![nginx gitweb final](./assets/nginx_final_gitweb.png)
+
+### Дополнительная кастомизация GitWeb
+
+GitWeb имеет возможность использовать кастомные стили и скрипты JS.
+
+Для этого в `/etc/gitweb.conf` используются строки: *@stylesheets* и *$javascript*.
+
+### Итоги
+
+В ходе данной практики я разобрал как настроить с нуля свой собственный git сервер без посредников, таких как GitLab или Gitea.
