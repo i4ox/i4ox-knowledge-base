@@ -35,6 +35,7 @@ git add --all # Все файлы
 git add *.md # С определенным расширением
 git add . # Все файлы в корне(кроме скрытых)
 git add README.md # Определенный файл/директория
+git add -i # Интерактивный режим
 ```
 
 ## git commit
@@ -191,6 +192,8 @@ git tag -d v1.1 # Удаление тега
 
 ```bash
 git show v1.1
+git show HEAD@{5} # Просматреть HEAD пять шагов тому назад
+git show HEAD^ # Просматреть предыдущий коммит
 ```
 
 ## git checkout
@@ -267,6 +270,7 @@ git ls-remove git@github.com:i4ox/dotfiles
 ```bash
 git rebase master server
 git rebase --onto master server client # Берем изменения из client, которых  нету в server и применяем их к мастер
+git rebase -i HEAD~3 # Обьединение последних трех коммитов, создание нового # Обьединение последних трех коммитов, создание нового
 ```
 
 ## git daemon
@@ -292,3 +296,51 @@ git daemon --reuseaddr --export-all --base-path=/srv/git/ /srv/git/
 ## git instaweb
 
 Позволяет запустить веб-сервер для просмотра экземпляра GitWeb для текущего репозитория.
+
+## git reflog
+
+Позволяет просматривать журнул с привязкой к ссылкам:
+
+```bash
+git reflog
+```
+
+## git stash
+
+Позволяет сохранить работу для того, чтобы вернуться к ней позже:
+
+```bash
+git stash # Прячем изменения в специальное хранилище
+git stash list # Список припрятанных изменений
+git stash apply # Востановление изменений из хранилища
+git stash --patch # В интерактивном режиме спрашивает что оставить, а что спрятать
+git stash branch testchanges # Создает отдельную ветку из спрятанных решений
+git stash --all # удаляет все, но с сохранением этого в виде припрятанных изменений
+```
+
+## git clean
+
+Удаляет непроиндексированные файлы:
+
+```bash
+git clean
+git clean -d # Удаляет непроиндексированные файлы
+git clean -f # Принудительное удаление
+git clean -n # Позволяет лишь просматреть что будет удалено
+git clean -x # Позволяет удалить все файлы, которые не попадают под другие критерии
+git clean -i # Интерактивный режим
+```
+
+## git grep
+
+Аналог *grep*, но для рабочего пространства git и поиска по его деревьям:
+
+```bash
+git grep --break --heading <QUERY> # Выводит в более читаемом виде
+```
+
+## git filter-branch
+
+Является сторонней утилитой - [https://github.com/newren/git-filter-repo](https://github.com/newren/git-filter-repo).
+
+Используется для изменения истории коммитов.

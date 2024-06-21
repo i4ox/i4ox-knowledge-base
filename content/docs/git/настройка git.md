@@ -36,12 +36,36 @@ Git нам позволяет явно указать редактор, кото
 git config --global core.editor nvim
 ```
 
+### commit.template
+
+Позволяет задать шаблон для коммита.
+
+```bash
+git config --global commit.template ~/.gitmessage
+```
+
+### core.pager
+
+Определяет какая программа будет использована для разбиения текста на страницы.
+
+```bash
+git config --global core.pager nvimpager
+```
+
 ### merge.tool
 
 Указывает на инструмент, который надо использовать для команды `mergetool`.
 
 ```bash
 git config --global merge.tool nvimdiff
+```
+
+### diff.external
+
+Указывает на инструмент, который надо использовать для сравнения.
+
+```bash
+git config --global diff.external nvimdiff
 ```
 
 ### init.defaultBranch
@@ -78,3 +102,22 @@ git config --global alias.unstage 'reset HEAD --'
 git config --global alias.last 'log -1 HEAD'
 git config --global alias.visual '!nvim -c Neogit' # Поменяйте на свой редактор
 ```
+
+### core.excludesfile
+
+Какие файлы стоит игнорировать в проектах.
+
+```bash
+git config --global core.excludesfile ~/.gitignore_global
+```
+
+### color.ui
+
+Стоит ли подсвечивать большую часть вывода.
+
+```bash
+git config --global color.ui true
+git config --global color.ui false
+```
+
+Можно отдельно для разных элементов: *color.branch*, *color.diff*, *color.interactive*, *color.status*.
